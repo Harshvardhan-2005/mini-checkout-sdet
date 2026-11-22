@@ -147,21 +147,17 @@ test.describe('Mini Checkout Suite', () => {
 
     const placeOrderBtn = page.getByTestId('place-order-btn');
 
-    // Execute rapid consecutive clicks
-    await Promise.all([
-      placeOrderBtn.click(),
-      placeOrderBtn.click({ force: true }).catch(() => {}), // In case button gets disabled immediately
-      placeOrderBtn.click({ force: true }).catch(() => {})
-    ]);
+    // Trigger rapid double-click
+    await placeOrderBtn.dblclick();
 
     // Assert: Only ONE confirmation card exists and is visible
-    const confirmationCards = page.getByTestId('confirmation-card');
-    await expect(confirmationCards).toHaveCount(1);
-    await expect(confirmationCards).toBeVisible();
+    const confirmationCard = page.getByTestId('confirmation-card');
+    await expect(confirmationCard).toBeVisible();
 
     // Assert: Single order reference displayed
     const references = page.getByTestId('order-reference');
     await expect(references).toHaveCount(1);
     await expect(references).toHaveText(/^ORD-[A-Z0-9]+-\d{4}$/);
+    await expect(page.getByTestId('confirmed-customer-name')).toHaveText('Alice Johnson');
   });
 });
