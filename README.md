@@ -31,6 +31,13 @@ A production-grade, single-page eCommerce checkout flow paired with an automated
 
 ---
 
+## 🌐 Live Demo & GitHub Links
+
+* **GitHub Repository:** [https://github.com/Harshvardhan-2005/mini-checkout-sdet](https://github.com/Harshvardhan-2005/mini-checkout-sdet)
+* **Live Demo (GitHub Pages):** [https://harshvardhan-2005.github.io/mini-checkout-sdet/](https://harshvardhan-2005.github.io/mini-checkout-sdet/)
+
+---
+
 ## 🚀 Quickstart Guide
 
 ### Prerequisites
@@ -42,7 +49,7 @@ A production-grade, single-page eCommerce checkout flow paired with an automated
 Clone this repository and install dependencies:
 
 ```bash
-git clone https://github.com/<your-username>/mini-checkout-sdet.git
+git clone https://github.com/Harshvardhan-2005/mini-checkout-sdet.git
 cd mini-checkout-sdet
 npm install
 ```
