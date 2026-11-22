@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Store — Mini Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="store-header">
+      <div class="header-inner">
+        <div class="logo">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Nova Gear</span>
+        </div>
+        <div class="badge">SDET Checkout Testbed</div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Checkout Form View -->
+      <div id="checkoutView" class="checkout-grid">
+        <!-- Left Column: Customer details & Catalog -->
+        <section class="left-col">
+          <!-- Customer Details Card -->
+          <div class="card form-card">
+            <h2 class="card-title">1. Customer Details</h2>
+            <div class="form-group">
+              <label for="customerName">
+                Full Name <span class="required-star">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="customerName" 
+                name="customerName" 
+                data-testid="customer-name" 
+                placeholder="e.g. Alex Morgan"
+                autocomplete="name"
+              >
+              <p class="field-hint">Required for order verification and shipping label.</p>
+            </div>
+
+            <div class="form-group">
+              <label for="customerEmail">Email Address (Optional)</label>
+              <input 
+                type="email" 
+                id="customerEmail" 
+                name="customerEmail" 
+                data-testid="customer-email" 
+                placeholder="alex.morgan@example.com"
+                autocomplete="email"
+              >
+            </div>
+          </div>
+
+          <!-- Items in Cart Card -->
+          <div class="card cart-card">
+            <div class="cart-card-header">
+              <h2 class="card-title">2. Review Cart Items</h2>
+              <button type="button" id="resetCartBtn" class="btn-text" data-testid="reset-cart-btn" title="Reset cart to initial 2 items">
+                ↺ Reset Cart
+              </button>
+            </div>
+
+            <div id="cartItemsList" class="cart-items-list" data-testid="cart-items-list">
+              <!-- Dynamically populated by app.js -->
+            </div>
+
+            <!-- Empty Cart Notice -->
+            <div id="emptyCartNotice" class="empty-cart-state" data-testid="empty-cart-state" style="display: none;">
+              <div class="empty-cart-icon">🛒</div>
+              <p class="empty-cart-text">Your cart is currently empty.</p>
+              <p class="empty-cart-subtext">Add products below to proceed with checkout.</p>
+            </div>
+
+            <!-- Catalog Re-add Drawer if items removed -->
+            <div id="catalogDrawer" class="catalog-drawer">
+              <h3 class="drawer-title">Available Products</h3>
+              <div id="catalogList" class="catalog-list">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Right Column: Order Summary & Place Order -->
+        <aside class="right-col">
+          <div class="card summary-card">
+            <h2 class="card-title">Order Summary</h2>
+
+            <div class="summary-breakdown">
+              <div class="summary-row">
+                <span>Subtotal</span>
+                <span id="summarySubtotal" data-testid="summary-subtotal">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Standard Shipping</span>
+                <span class="badge-free">FREE</span>
+              </div>
+              <div class="summary-row">
+                <span>Estimated Tax (0%)</span>
+                <span>$0.00</span>
+              </div>
+              <hr class="summary-divider">
+              <div class="summary-row total-row">
+                <span class="total-label">Order Total</span>
+                <span id="orderTotal" class="total-amount" data-testid="order-total">$0.00</span>
+              </div>
+            </div>
+
+            <!-- Validation Alert Box -->
+            <div 
+              id="validationAlert" 
+              class="validation-alert" 
+              data-testid="validation-alert" 
+              role="alert" 
+              aria-live="polite" 
+              style="display: none;"
+            >
+              <div class="alert-icon">⚠️</div>
+              <div class="alert-content">
+                <strong class="alert-heading">Checkout Blocked</strong>
+                <p id="alertMessage" class="alert-message" data-testid="alert-message"></p>
+              </div>
+            </div>
+
+            <!-- Checkout Action Button -->
+            <button 
+              type="button" 
+              id="placeOrderBtn" 
+              class="btn-primary" 
+              data-testid="place-order-btn"
+            >
+              <span class="btn-text-content">Place Order</span>
+              <span class="spinner" style="display: none;"></span>
+            </button>
+
+            <div class="security-note">
+              🔒 Guaranteed safe & secure mock checkout.
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Order Confirmation View (Shown on Successful Order) -->
+      <div 
+        id="confirmationView" 
+        class="confirmation-card card" 
+        data-testid="confirmation-card" 
+        style="display: none;"
+      >
+        <div class="success-icon-wrapper">
+          <div class="success-icon">✓</div>
+        </div>
+        <h1 class="confirmation-title">Thank you for your order!</h1>
+        <p class="confirmation-subtitle">
+          Your order has been placed and a receipt is ready.
+        </p>
+
+        <div class="reference-box">
+          <span class="reference-label">Order Reference:</span>
+          <span id="orderReference" class="reference-value" data-testid="order-reference"></span>
+        </div>
+
+        <div class="confirmation-details">
+          <div class="detail-row">
+            <span class="detail-label">Customer Name:</span>
+            <span id="confirmedCustomerName" class="detail-value" data-testid="confirmed-customer-name"></span>
+          </div>
+          <div class="detail-row" id="confirmedEmailRow" style="display: none;">
+            <span class="detail-label">Email:</span>
+            <span id="confirmedCustomerEmail" class="detail-value" data-testid="confirmed-customer-email"></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Items Ordered:</span>
+            <span id="confirmedItemsCount" class="detail-value" data-testid="confirmed-items-count"></span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Total Amount:</span>
+            <span id="confirmedOrderTotal" class="detail-value total-highlight" data-testid="confirmed-order-total"></span>
+          </div>
+        </div>
+
+        <div class="confirmation-actions">
+          <button type="button" id="newOrderBtn" class="btn-primary" data-testid="new-order-btn">
+            Start New Checkout
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="store-footer">
+      <p>Mini Checkout SDET Assignment &bull; Built with HTML5, CSS3 & Modern JavaScript</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
